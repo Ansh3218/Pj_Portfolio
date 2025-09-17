@@ -1,0 +1,63 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: Timerfonts;
+  src: url("/assets/Fonts/Chirp-Regular.ttf") format("truetype");
+}
+* {
+  cursor: none !important;
+}
+:root {
+  --bg: #fff;
+  --fg: #0a0a0a;
+}
+
+/* Horizontal scrollbar hide */
+body {
+  overflow-x: hidden;
+}
+
+/* Scrollbar hide (Webkit browsers: Chrome, Safari) */
+body::-webkit-scrollbar {
+  scrollbar-width: none;
+  display: none;
+}
+
+/* View Transitions CSS */
+.revealer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100svh;
+  transform-origin: center top;
+  background-color: var(--fg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none !important;
+}
+::view-transition-group(root) {
+  animation: area !important;
+}
+::view-transition-image-pair(root) {
+  isolation: isolate;
+  will-change: clip-path;
+  z-index: 1;
+}
+::view-transition-new(root) {
+  z-index: 100000;
+  animation: none !important;
+}
+::view-transition-old(root) {
+  z-index: 1;
+  animation: none !important;
+}
+
+.antialiased {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
