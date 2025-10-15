@@ -61,13 +61,49 @@ const Faq = () => {
 
   const faqs = [
     {
-      question: "How do you edit a video from start to finish?",
+      question: "Can you help my content go viral?",
       answer:
-        "I import the raw footage, cut unnecessary parts, add effects, correct colors, fix audio, and finally export in high quality.",
+        "I can’t guarantee virality (no one can), but I’ve Directed and edited a short film that hit millions of views across social platforms, including 1.1M+ on my own YouTube along with some other reels of mine as well as clients hitting millions of views. I know how to shape content that has the best chance to perform.",
     },
     {
-      question: "Which software do you use for video editing?",
-      answer: "I mainly use Adobe Premiere Pro and After Effects for editing.",
+      question: "How do you deliver the final project?",
+      answer:
+        "Usually via Google Drive or We transfer in the format and resolution you need (HD/4K)",
+    },
+    {
+      question: "How do you handle revisions?",
+      answer:
+        "Simple I always include a set number of revisions in the package so you’re fully happy with the final edit.",
+    },
+    {
+      question: "Do you take international clients?",
+      answer:
+        "Yes! Already worked with a few abroad, and I’m open to collaborations worldwide.",
+    },
+    {
+      question: "How do I get started working with you?",
+      answer:
+        "Just hit the contact form or drop me a message—tell me about your project, and we’ll figure out the best way to bring it to life.",
+    },
+    {
+      question: "Do you offer long-term editing partnerships?",
+      answer:
+        "Yes, many of my clients work with me on a monthly retainer for consistent content. If you need a reliable editor for YouTube, Reels, or brand content, I’m open to long-term collaboration.",
+    },
+    {
+      question: "How do you manage deadlines?",
+      answer:
+        "I’m very strict with delivery timelines. I share a clear schedule before starting and send regular updates, so you always know the status of your project—no last-minute surprises..",
+    },
+    {
+      question: "What if I don’t have a script or video concept yet?",
+      answer:
+        "No worries! I also help with creative direction—scripting, shot planning, pacing strategy, and storyboard guidance—so your video has a strong concept before editing even begins.",
+    },
+    {
+      question: "Still have questions?",
+      answer:
+        "No problem — feel free to reach out anytime. If there’s anything else you’d like to ask or discuss about your project, just contact me directly. I’d be happy to help.",
     },
   ];
 
@@ -127,7 +163,10 @@ const Faq = () => {
       <div className="FAQ border-t-2 border-gray-700 w-full h-auto min-h-screen py-28 px-4">
         <div className="mx-auto max-w-6xl max-sm:text-lg">
           {faqs.map((faq, i) => (
-            <FAQItem key={i} question={faq.question} answer={faq.answer} />
+            <>
+              <span className="w-5 h-5 bg-gray-100 rounded-full"></span>
+              <FAQItem key={i} question={faq.question} answer={faq.answer} />
+            </>
           ))}
         </div>
       </div>

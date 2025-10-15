@@ -35,7 +35,7 @@ const Work = () => {
       <div className="min-h-full h-auto w-full pb-12">
         <CommonShortVideo />
       </div>
-        <Footer />
+      <Footer />
     </div>
   );
 };

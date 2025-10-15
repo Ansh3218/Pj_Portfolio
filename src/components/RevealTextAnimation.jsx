@@ -56,6 +56,7 @@ export const TextRevealer = ({
 };
 
 // 🟢 Scroll Animation
+
 export const TextRevealerOnScroll = ({
   text = "",
   duration = 1.5,
@@ -74,11 +75,11 @@ export const TextRevealerOnScroll = ({
     // Initial hidden state
     gsap.set(chars, { y: "100%", opacity: 0 });
 
-    // ✅ Responsive values
+    // Responsive values
     const isMobile = window.innerWidth <= 640;
     const triggerStart = isMobile ? "top 80%" : "top 70%";
     const triggerEnd = isMobile ? "bottom 90%" : "bottom 70%";
-    const animDuration = isMobile ? duration * 1.4 : duration; // phone me thoda slow
+    const animDuration = isMobile ? duration * 1.4 : duration;
 
     const tl = gsap.timeline({
       scrollTrigger: {
@@ -89,22 +90,32 @@ export const TextRevealerOnScroll = ({
           ? "play none none reverse"
           : "play none none none",
         markers: false,
+        // ✨ Performance boost
+        invalidateOnRefresh: true,
+        fastScrollEnd: true,
       },
     });
 
-    // Animate chars
+    // ✨ Stagger animation - smooth reveal
     tl.to(chars, {
       y: "0%",
       opacity: 1,
       duration: animDuration,
       ease: "power2.out",
+      stagger: {
+        amount: animDuration * 0.5, // total stagger time
+        from: "start",
+      },
+      // ✨ GPU acceleration
+      force3D: true,
+      willChange: "transform, opacity",
     });
 
     return () => {
       if (tl.scrollTrigger) tl.scrollTrigger.kill();
       tl.kill();
     };
-  }, [duration, reverseOnScroll]);
+  }, [duration, reverseOnScroll, text]); // text ko dependency me add kiya
 
   // Split text into lines → then into chars
   const lines = text.split("\n");
@@ -114,7 +125,11 @@ export const TextRevealerOnScroll = ({
       {lines.map((line, lineIndex) => (
         <div key={lineIndex} className="overflow-hidden block">
           {line.split("").map((char, index) => (
-            <span key={index} className="char inline-block">
+            <span
+              key={`${lineIndex}-${index}`}
+              className="char inline-block"
+              style={{ willChange: "transform, opacity" }}
+            >
               {char === " " ? "\u00A0" : char}
             </span>
           ))}

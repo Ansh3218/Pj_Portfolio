@@ -9,7 +9,7 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import SplitType from "split-type";
-import TrendingVideoPreview from "../../public/assets/Video/pj_trending.mp4";
+// import TrendingVideoPreview from "../../public/assets/Video/pj_trending.mp4";
 import { TextRevealerOnScroll } from "./RevealTextAnimation";
 import CustomPixelText from "./CustomPixelText";
 
@@ -292,7 +292,9 @@ export const VideoSection = ({
     >
       <video
         ref={imgRef}
-        src={TrendingVideoPreview}
+        src={
+          "https://www.dropbox.com/scl/fi/q6r6xir77drjyk46arrq6/pj_trending.mp4?rlkey=nmlvu6jblle09iru3mofsx7bh&st=sbkjmq5p&raw=1"
+        }
         autoPlay
         loop
         muted
@@ -314,8 +316,8 @@ export const VideoSection = ({
 // ================== STATS SECTION ==================
 export const StatsSection = () => {
   return (
-    <div className="pt-11 h-[15%] w-full">
-      <div className="text-center flex justify-around items-center border-blue-500">
+    <div className="pt-11 min-h-[15%] w-full">
+      <div className="text-center flex justify-around items-center border-blue-500 w-full pt-[10vh]">
         <h1 className="text-5xl font-bold max-sm:text-lg">
           <TextRevealerOnScroll
             reverseOnScroll={true}
@@ -471,7 +473,7 @@ export const DescriptionSection = ({ videoTextRef }) => {
           <p>believe that the Divine resides in everyone.</p>
         </span>
       </span>
-      <span className="w-full h-[40%] flex items-end px-12 max-sm:px-5 max-sm:h-1/2 max-sm:items-end">
+      <span className="w-full h-[50%] flex items-end px-12 max-sm:px-5 max-sm:h-1/2 max-sm:items-end">
         <span className="w-1/2 h-full p-16 pl-0 relative videoDetailsPara max-sm:p-0">
           <p className="max-sm:text-justify">
             However, what is wrong must be shown as wrong. Since it is a

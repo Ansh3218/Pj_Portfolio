@@ -1,39 +1,36 @@
 import React from "react";
 import CustomPixelText from "./CustomPixelText";
 import MobileSizeText from "./MobileSizeText";
-import { TextRevealerOnScroll } from "./RevealTextAnimation";
+import { TextRevealer, TextRevealerOnScroll } from "./RevealTextAnimation";
 
 export const LongIntroduction = () => {
   return (
     <div className="w-full h-auto bg-black">
       {/* Desktop Layout */}
-      <div className="about w-full min-h-[100vh] h-auto text-center text-gray-300 font-semibold font-[poppins] flex items-center justify-center gap-y-4 max-sm:hidden">
+      <div className="about w-full min-h-[100vh] h-auto text-center text-gray-300 font-semibold font-[poppins] flex items-center justify-center gap-y-4 max-sm:hidden py-28">
         <div className="text-center">
           <div className="text-lg text-gray-400 font-semibold font-[poppins]">
             <h1 className="pr-10">(About)</h1>
           </div>
 
-          <p className="text-xl text-justify m-auto border-r-2 pt-8 pr-12 border-gray-300 w-[55%]">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-            nisi et eos voluptatum officiis iusto consectetur doloremque maiores
-            excepturi distinctio ipsam. Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Dolorum praesentium minus repellendus, labore eos
-            tempora, nobis vitae eum iure consequuntur tenetur natus saepe,
-            ipsam ut quaerat quos soluta maiores temporibus?
-          </p>
+          <TextRevealerOnScroll
+            duration={3}
+            text={`Hey, I’m Prashant Joshi a storyteller who just happens to use video editing as the medium. My journey kicked off in 2018, editing my own dance choreography videos on Kinemaster. What started as a hobby slowly grew into a full-time craft, and today I work with industry-standard tools like Premiere Pro and After Effects, editing for creators, filmmakers, and brands. Over the years, I’ve worked with 50+ clients from different corners of India ( and a few abroad too ) Most of my projects revolve around films and content creators both short and long form but I’ve also collaborated with businesses, and I’m looking to expand more in that space. One of the highlights of my journey so far has been a short film I created that went viral across multiple social media platforms, crossing millions of views and 1.1 Million+ on my own YouTube channel. That project made me realize how powerful editing can be when storytelling and visuals click perfectly. At the end of the day, for me, editing isn’t just about cuts, transitions, or effects it’s about shaping emotions, simplifying complex ideas, and creating videos that leave a lasting impact. Whether it’s a 15-second reel or a 15-minute film, I bring the same passion into every frame`}
+            className="text-lg text-justify m-auto border-r-2 pt-10 pr-10 border-gray-300 w-[80%] px-6"
+          ></TextRevealerOnScroll>
         </div>
 
         <div className="relative">
-          <p className="absolute left-64 text-xl text-gray-400">
+          <p className="absolute left-40 text-xl text-gray-400">
             learning, experimenting, <br /> + years of experience
           </p>
           <CustomPixelText
-            textString="10"
+            textString="5"
             textAlignments={["left"]}
             fontSizes={["250"]}
             canvasSizes={[{ h: "250", w: "700" }]}
             gapY={-300}
-            fontFamily="gilroy"
+            fontFamily="poppins"
           />
         </div>
       </div>
@@ -47,24 +44,37 @@ export const LongIntroduction = () => {
           </div>
 
           <p className="max-sm:text-base max-sm:text-justify max-sm:px-4 max-sm:leading-relaxed max-sm:border-l-2 max-sm:border-gray-300 max-sm:pl-4">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferendis
-            nisi et eos voluptatum officiis iusto consectetur doloremque maiores
-            excepturi distinctio ipsam. Lorem ipsum dolor sit, amet consectetur
-            adipisicing elit. Dolorum praesentium minus repellendus, labore eos
-            tempora, nobis vitae eum iure consequuntur tenetur natus saepe,
-            ipsam ut quaerat quos soluta maiores temporibus?
+            Hey, I’m Prashant Joshi —a storyteller who just happens to use video
+            editing as the medium. My journey kicked off in 2018, editing my own
+            dance choreography videos on Kinemaster. What started as a hobby
+            slowly grew into a full-time craft, and today I work with
+            industry-standard tools like Premiere Pro and After Effects, editing
+            for creators, filmmakers, and brands. Over the years, I’ve worked
+            with 50+ clients from different corners of India (and a few abroad
+            too). Most of my projects revolve around films and content
+            creators—both short and long form—but I’ve also collaborated with
+            businesses, and I’m looking to expand more in that space. One of the
+            highlights of my journey so far has been a short film I created that
+            went viral across multiple social media platforms, crossing millions
+            of views and 1.1 Million+ on my own YouTube channel. That project
+            made me realize how powerful editing can be when storytelling and
+            visuals click perfectly. At the end of the day, for me, editing
+            isn’t just about cuts, transitions, or effects—it’s about shaping
+            emotions, simplifying complex ideas, and creating videos that leave
+            a lasting impact. Whether it’s a 15-second reel or a 15-minute film,
+            I bring the same passion into every frame.
           </p>
         </div>
 
         {/* Experience Section */}
         <div className="max-sm:flex max-sm:flex-row-reverse max-sm:items-center max-sm:justify-between max-sm:flex-1">
-          <p className="max-sm:text-lg max-sm:text-gray-400 max-sm:text-end max-sm:w-1/2">
+          <p className="max-sm:text-lg max-sm:text-gray-400 max-sm:text-end max-sm:w-full max-sm:p-[6vw]">
             learning, experimenting, <br /> + years of experience
           </p>
-          <div className="max-sm:w-1/2">
+          <div className="max-sm:w-1/3">
             <MobileSizeText
-              text="10"
-              className="max-sm:text-[8rem] max-sm:leading-none max-sm:inline-block max-sm:m-auto max-sm:w-full"
+              text="5"
+              className="max-sm:text-[8rem] max-sm:leading-none max-sm:inline-block max-sm:m-auto max-sm:w-full max-sm:pl-[6vw]"
             />
           </div>
         </div>
@@ -84,9 +94,12 @@ export const ShortIntroduction = () => {
           </div>
 
           <TextRevealerOnScroll
+            duration={1.2}
+            reverseOnScroll={true}
             stagger={0.03}
-            text={`Lorem ipsum dolor sit amet consectetur adipisicing elit. \n Perferend is nisi et eos voluptatum officiis iusto \n  consectetur doloremque maiores excepturi distinction \n ipsam. Lorem ipsum dolor sit, amet consectetur`}
-            className="text-xl text-center m-auto pt-6 overflow-hidden"
+            text={`I’m a video editor with 5+ years of experience—started back in 2018 on Kinemaster, now \n rolling with Premiere Pro & After Effects. Worked with 50+ clients across India and \n abroad, edited everything from short-form reels to full-length films, and even pulled \n off a viral short film that hit millions of views (1.1M+ on my own YouTube). My thing? \n  Turning raw footage into stories that people actually want to watch and share.
+`}
+            className="text-lg text-center m-auto pt-6 overflow-hidden"
           />
         </div>
       </div>
@@ -99,10 +112,13 @@ export const ShortIntroduction = () => {
           </div>
 
           <p className="max-sm:text-base max-sm:text-center max-sm:px-4 max-sm:leading-relaxed max-sm:max-w-md max-sm:mx-auto">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Perferend
-            is nisi et eos voluptatum officiis iusto consectetur doloremque
-            maiores excepturi distinction ipsam. Lorem ipsum dolor sit, amet
-            consectetur
+            I’m a video editor with 5+ years of experience—started back in 2018
+            on Kinemaster, now rolling with Premiere Pro & After Effects.
+            Worked with 50+ clients across India and abroad, edited
+            everything from short-form reels to full-length films, and even
+            pulled off a viral short film that hit millions of views (1.1M+
+            on my own YouTube). My thing? Turning raw footage into stories
+            that people actually want to watch and share.
           </p>
         </div>
       </div>

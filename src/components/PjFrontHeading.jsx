@@ -17,12 +17,12 @@ const PjFrontHeading = () => {
           </div>
           <div className="heading">
             <CustomPixelText
-              textString={`LOREM \n ISPU`}
-              textAlignments={["center", "right"]}
+              textString={`HEY\n THERE`}
+              textAlignments={["left", "right"]}
               fontSizes={["220", "230"]}
               canvasSizes={[
-                { h: "400", w: "800" },
-                { h: "300", w: "670" },
+                { h: "400", w: "680" },
+                { h: "300", w: "700" },
               ]}
               gapY={-160}
               fontFamily="gilroy"
@@ -34,7 +34,7 @@ const PjFrontHeading = () => {
           {/* Mobile Text Section */}
           <div className="max-sm:flex max-sm:justify-center max-sm:items-center max-sm:flex-1 max-sm:w-full max-sm:overflow-hidden">
             <MobileSizeText
-              text="LOREM ISPU"
+              text="HEY THERE"
               className="max-sm:text-[25vw] max-sm:pt-5 max-sm:leading-[0.9]"
             />
           </div>

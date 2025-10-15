@@ -5,21 +5,141 @@ import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Bloom, EffectComposer } from "@react-three/postprocessing";
 
+// 🟢 Responsive Configuration Hook
+const useResponsiveConfig = () => {
+  const [config, setConfig] = useState({
+    isMobile: false,
+    isTablet: false,
+    isSmall: false,
+    width: typeof window !== "undefined" ? window.innerWidth : 1920,
+  });
+
+  useEffect(() => {
+    const updateConfig = () => {
+      const width = window.innerWidth;
+      setConfig({
+        isMobile: width < 640,
+        isTablet: width >= 640 && width < 1024,
+        isSmall: width < 1000,
+        width,
+      });
+    };
+
+    updateConfig();
+    window.addEventListener("resize", updateConfig);
+    return () => window.removeEventListener("resize", updateConfig);
+  }, []);
+
+  return config;
+};
+
+// 🟢 Get Performance Settings based on screen size
+const getPerformanceSettings = (width) => {
+  if (width < 640) {
+    // Mobile phones
+    return {
+      cylinderSegments: [230, 60],
+      bloomIntensity: 0.8,
+      dpr: [1, 1.5],
+      antialias: false,
+      shadowMap: false,
+      rotationSpeed: 0.35,
+      animDuration: 1.8,
+      bounceHeight: 2.5,
+      textDuration: 15,
+      textureFiltering: "low",
+    };
+  } else if (width < 768) {
+    // Large phones
+    return {
+      cylinderSegments: [100, 70],
+      bloomIntensity: 0.5,
+      dpr: [1, 1.2],
+      antialias: false,
+      shadowMap: false,
+      rotationSpeed: 0.3,
+      animDuration: 2,
+      bounceHeight: 3,
+      textDuration: 18,
+    };
+  } else if (width < 1000) {
+    // Tablets
+    return {
+      cylinderSegments: [120, 80],
+      bloomIntensity: 1.5,
+      dpr: [1, 1.3],
+      antialias: true,
+      shadowMap: false,
+      rotationSpeed: 0.28,
+      animDuration: 2.2,
+      bounceHeight: 3.5,
+      textDuration: 22,
+    };
+  } else if (width < 1440) {
+    // Small laptops
+    return {
+      cylinderSegments: [140, 90],
+      bloomIntensity: 2.5,
+      dpr: [1, 1.5],
+      antialias: true,
+      shadowMap: true,
+      rotationSpeed: 0.25,
+      animDuration: 2.5,
+      bounceHeight: 5,
+      textDuration: 28,
+    };
+  } else {
+    // Large screens
+    return {
+      cylinderSegments: [150, 100],
+      bloomIntensity: 4,
+      dpr: [1, 2],
+      antialias: true,
+      shadowMap: true,
+      rotationSpeed: 0.25,
+      animDuration: 2.5,
+      bounceHeight: 5,
+      textDuration: 30,
+    };
+  }
+};
+
+// 🟢 Get Cylinder Size based on screen size
+const getCylinderSize = (width) => {
+  if (width < 480) return { radius: 1.2, height: 0.7, scale: 0.6 };
+  if (width < 640) return { radius: 1.3, height: 0.75, scale: 0.65 };
+  if (width < 768) return { radius: 1.4, height: 0.8, scale: 0.75 };
+  if (width < 1000) return { radius: 1.5, height: 0.85, scale: 0.85 };
+  if (width < 1440) return { radius: 1.6, height: 0.95, scale: 0.95 };
+  return { radius: 1.7, height: 1, scale: 1 };
+};
+
+// 🟢 Get Camera Settings
+const getCameraSettings = (width) => {
+  if (width < 480) return { fov: 40, position: [0, 0, 4.4] };
+  if (width < 640) return { fov: 38, position: [0, 0, 4] };
+  if (width < 768) return { fov: 35, position: [0, 0, 3.5] };
+  if (width < 1000) return { fov: 32, position: [0, 0, 3.8] };
+  if (width < 1440) return { fov: 28, position: [0, 0, 4] };
+  return { fov: 25, position: [0, 0, 5.5] };
+};
+
 // 🟢 3D Cylinder Scene with Image Texture
-export const ShowCaseScene = () => {
+export const ShowCaseScene = ({ isDragging }) => {
   const Cyl = useRef(null);
   const groupRef = useRef(null);
   const [imgTexture, setImgTexture] = useState(null);
+  const config = useResponsiveConfig();
 
   useEffect(() => {
-    // ✅ Load Image instead of Video
     const loader = new THREE.TextureLoader();
-    loader.load("/assets/Images/PJ.JPG", (texture) => {
+    loader.load("/assets/Images/HeroImg.png", (texture) => {
       texture.minFilter = THREE.LinearFilter;
       texture.magFilter = THREE.LinearFilter;
+      texture.anisotropy = 7;
       texture.wrapS = THREE.RepeatWrapping;
       texture.wrapT = THREE.RepeatWrapping;
-      texture.repeat.set(1, 1); // control tiling
+      texture.repeat.set(1, 1);
       setImgTexture(texture);
     });
   }, []);
@@ -28,66 +148,67 @@ export const ShowCaseScene = () => {
   useEffect(() => {
     const handleResize = () => {
       if (Cyl.current && groupRef.current) {
-        const isMobile = window.matchMedia("(max-width: 640px)").matches;
+        const width = window.innerWidth;
+        const { scale } = getCylinderSize(width);
 
-        // Mobile responsive cylinder size
-        if (isMobile) {
-          groupRef.current.scale.setScalar(0.7); // Scale down to 70%
-          groupRef.current.position.set(0, -0.2, 0); // Slightly lower position
+        groupRef.current.scale.setScalar(scale);
+
+        // Adjust position based on screen size
+        if (width < 640) {
+          groupRef.current.position.set(0, -0.3, 0);
+        } else if (width < 1000) {
+          groupRef.current.position.set(0, -0.15, 0);
         } else {
-          groupRef.current.scale.setScalar(1); // Normal scale
-          groupRef.current.position.set(0, 0, 0); // Normal position
+          groupRef.current.position.set(0, 0, 0);
         }
       }
     };
 
     handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
-  // 🟢 Bounce Animation on load - Mobile responsive
+  // 🟢 Bounce Animation on load
   useEffect(() => {
     if (Cyl.current) {
-      const isMobile = window.matchMedia("(max-width: 640px)").matches;
+      const width = window.innerWidth;
+      const perf = getPerformanceSettings(width);
 
-      Cyl.current.position.y = isMobile ? 3 : 5; // Less bounce on mobile
+      Cyl.current.position.y = perf.bounceHeight;
       gsap.to(Cyl.current.position, {
         y: 0.25,
-        duration: isMobile ? 2 : 2.5, // Faster on mobile
-        ease: "elastic.out(1, 0.50)",
+        duration: perf.animDuration,
+        ease: "elastic.out(1, 0.40)",
         delay: 0.3,
       });
     }
   }, []);
 
-  // 🟢 Continuous Rotation - Mobile optimized
+  // 🟢 Continuous Rotation - Performance optimized
   useFrame((state, delta) => {
-    if (Cyl.current) {
-      const isMobile = window.matchMedia("(max-width: 640px)").matches;
-      const rotationSpeed = isMobile ? 0.3 : 0.5; // Slower on mobile for performance
-      Cyl.current.rotation.y += delta * rotationSpeed;
+    if (Cyl.current && !isDragging) {
+      const perf = getPerformanceSettings(config.width);
+      Cyl.current.rotation.y += delta * perf.rotationSpeed;
     }
   });
 
+  const { radius, height } = getCylinderSize(config.width);
+  const perf = getPerformanceSettings(config.width);
+
   return (
-    <group ref={groupRef} rotation={[0.3, 0, 0.15]}>
+    <group ref={groupRef} rotation={[0.1, 0.3, 0.25]}>
       <mesh ref={Cyl}>
         <cylinderGeometry
-          args={
-            window.matchMedia("(max-width: 640px)").matches
-              ? [1.4, 1.4, 0.8, 120, 80, true] // Mobile: smaller, less geometry
-              : [1.7, 1.7, 1, 150, 100, true] // Desktop: original size
-          }
+          args={[radius, radius, height, ...perf.cylinderSegments, true]}
         />
         {imgTexture && (
           <meshStandardMaterial
             map={imgTexture}
             side={THREE.DoubleSide}
-            color={"#cccccc"}
-            emissive={"#111111"}
+            emissive={"black"}
             emissiveIntensity={0.5}
+            transparent={true}
           />
         )}
       </mesh>
@@ -101,22 +222,25 @@ export const ShowCaseCanvas = () => {
   const textRefs = useRef([]);
   const blurRef = useRef(null);
   const canvasWrapperRef = useRef(null);
+  const [isDragging, setIsDragging] = useState(false);
+  const config = useResponsiveConfig();
 
   const textLines = [
-    "FUTURE IS HERE ",
+    "Content that doesn't just play",
     "INNOVATION NEVER STOPS ",
-    "BEYOND IMAGINATION",
+    "IT PERFORMS",
   ];
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 640px)").matches;
+    const width = window.innerWidth;
+    const perf = getPerformanceSettings(width);
 
     containerRefs.current.forEach((container, i) => {
       const texts = textRefs.current[i]?.filter(Boolean);
       if (!container || !texts?.length) return;
 
       const textWidth = texts[0].getBoundingClientRect().width;
-      const gap = isMobile ? 30 : 50; // Less gap on mobile
+      const gap = width < 640 ? 25 : width < 1000 ? 35 : 50;
       const totalWidth = textWidth + gap;
       const direction = i % 2 === 0 ? -1 : 1;
       const containerWidth = container.getBoundingClientRect().width;
@@ -127,7 +251,7 @@ export const ShowCaseCanvas = () => {
 
       gsap.to(texts, {
         x: direction === 1 ? `+=${totalWidth}` : `-=${totalWidth}`,
-        duration: isMobile ? 20 : 15, // Slower on mobile for readability
+        duration: perf.textDuration,
         ease: "linear",
         repeat: -1,
         modifiers: {
@@ -158,15 +282,43 @@ export const ShowCaseCanvas = () => {
       );
   }, []);
 
+  const perf = getPerformanceSettings(config.width);
+  const camera = getCameraSettings(config.width);
+
+  // Get text size based on width
+  const getTextSize = () => {
+    if (config.width < 480) return "28vw";
+    if (config.width < 640) return "16vw";
+    if (config.width < 768) return "14vw";
+    if (config.width < 1000) return "12vw";
+    if (config.width < 1440) return "10vw";
+    return "15vw";
+  };
+
+  // Get blur size based on width
+  const getBlurSize = () => {
+    if (config.width < 480) return "w-[180px] h-[180px]";
+    if (config.width < 640) return "w-[220px] h-[220px]";
+    if (config.width < 768) return "w-[260px] h-[260px]";
+    if (config.width < 1000) return "w-[300px] h-[300px]";
+    return "w-[350px] h-[350px]";
+  };
+
+  const getMarqueeHeight = () => {
+    if (config.width < 640) return "h-[18vh]";
+    if (config.width < 1000) return "h-[18vh]";
+    return "h-[30vh]";
+  };
+
   return (
     <div className="h-screen max-w-screen w-full relative overflow-x-hidden bg-black">
-      {/* 🔥 Background Infinite Marquee - Mobile Responsive */}
-      <div className="absolute inset-0 flex flex-col justify-around z-0 pointer-events-none max-sm:justify-center max-sm:gap-10">
+      {/* 🔥 Background Infinite Marquee - Fully Responsive */}
+      <div className="absolute inset-0 flex flex-col justify-around z-0 pointer-events-none">
         {textLines.map((line, i) => (
           <div
             key={i}
             ref={(el) => (containerRefs.current[i] = el)}
-            className="relative h-[30vh] overflow-hidden marquee-line opacity-0 max-sm:h-[15vh]"
+            className={`relative ${getMarqueeHeight()} overflow-hidden marquee-line opacity-0`}
           >
             {Array.from({ length: 6 }).map((_, idx) => (
               <div
@@ -175,11 +327,9 @@ export const ShowCaseCanvas = () => {
                   if (!textRefs.current[i]) textRefs.current[i] = [];
                   textRefs.current[i][idx] = el;
                 }}
-                className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-light tracking-wider max-sm:tracking-wide"
+                className="absolute top-1/2 -translate-y-1/2 whitespace-nowrap font-light tracking-wider uppercase"
                 style={{
-                  fontSize: window.matchMedia("(max-width: 640px)").matches
-                    ? "20vw"
-                    : "15vw",
+                  fontSize: getTextSize(),
                   background:
                     "linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 20%, rgba(255,255,255,1) 30%, rgba(255,255,255,0) 90%)",
                   WebkitBackgroundClip: "text",
@@ -194,56 +344,55 @@ export const ShowCaseCanvas = () => {
         ))}
       </div>
 
-      {/* 🔥 Center blur - Mobile Responsive */}
+      {/* 🔥 Center blur - Fully Responsive */}
       <div
         ref={blurRef}
-        className="absolute inset-0 flex items-center justify-center z-10 pointer-events-none opacity-0 scale-75"
+        className="absolute inset-0 flex items-center justify-center z-5 pointer-events-none opacity-0 scale-75"
       >
-        <div className="w-[400px] h-[400px] rounded-full bg-black/90 blur-3xl mix-blend-overlay max-sm:w-[250px] max-sm:h-[250px] max-sm:blur-2xl"></div>
+        <div
+          className={`${getBlurSize()} rounded-full bg-black/70 blur-2xl mix-blend-multiply`}
+        ></div>
       </div>
 
-      {/* 🔥 3D Model - Mobile Responsive */}
+      {/* 🔥 3D Model - Performance Optimized */}
       <div
         ref={canvasWrapperRef}
-        className="relative z-20 opacity-0 h-screen w-full"
+        className="relative z-20 opacity-0 h-screen w-full flex items-center justify-center"
       >
         <Canvas
           camera={{
-            fov: window.matchMedia("(max-width: 640px)").matches ? 35 : 25,
-            position: [
-              0,
-              0,
-              window.matchMedia("(max-width: 640px)").matches ? 6.5 : 5.5,
-            ],
+            fov: camera.fov,
+            position: camera.position,
           }}
           frameloop="always"
-          dpr={
-            window.matchMedia("(max-width: 640px)").matches
-              ? [1, 1.2]
-              : [1, 1.5]
-          }
+          dpr={perf.dpr}
           gl={{
-            powerPreference: "high-performance",
-            antialias: !window.matchMedia("(max-width: 640px)").matches, // Disable AA on mobile for performance
+            powerPreference: config.isSmall ? "low-power" : "high-performance",
+            antialias: perf.antialias,
           }}
         >
-          {/* <OrbitControls enableZoom={false} /> */}
-          <ambientLight intensity={0.5} />
+          {!config.isMobile && (
+            <OrbitControls
+              enableZoom={false}
+              onStart={() => setIsDragging(true)}
+              onEnd={() => setIsDragging(false)}
+              enableDamping={true}
+              dampingFactor={0.05}
+            />
+          )}
+          <ambientLight intensity={config.isSmall ? 0.6 : 0.5} />
           <directionalLight
             position={[2, 2, 5]}
-            intensity={
-              window.matchMedia("(max-width: 640px)").matches ? 1.5 : 2
-            }
+            intensity={config.isSmall ? 1.3 : 2}
+            castShadow={perf.shadowMap}
           />
-          <ShowCaseScene />
+          <ShowCaseScene isDragging={isDragging} />
           <EffectComposer>
             <Bloom
               mipmapBlur
-              intensity={
-                window.matchMedia("(max-width: 640px)").matches ? 0.15 : 0.2
-              }
-              luminanceThreshold={0.2}
-              luminanceSmoothing={0.9}
+              intensity={perf.bloomIntensity}
+              luminanceThreshold={0.65}
+              luminanceSmoothing={0.5}
             />
           </EffectComposer>
         </Canvas>

@@ -65,8 +65,8 @@ const PjCanvasImg = () => {
         scrollTrigger: {
           trigger: wrapper,
           start: "top top",
-          end: isMobile ? "+=3000" : "+=4000", // Shorter on mobile
-          scrub: isMobile ? 0.3 : 0.5, // Smoother on mobile
+          end: isMobile ? "+=2000" : "+=3000", // Shorter on mobile
+          scrub: isMobile ? 1 : 2, // Smoother on mobile
           pin: true,
           invalidateOnRefresh: true,
         },

@@ -1,12 +1,22 @@
 import gsap from "gsap";
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import CustomPixelText from "./CustomPixelText";
 import { TextRevealerOnScroll } from "./RevealTextAnimation";
 
 const Footer = () => {
   const containerRef = useRef(null);
   const textRefs = useRef([]);
+  const [isMobile, setIsMobile] = useState(false);
 
+  // ✅ Responsive check
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 700);
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  // ✅ Marquee animation
   useEffect(() => {
     const texts = textRefs.current.filter(Boolean);
     if (!texts.length) return;
@@ -27,10 +37,8 @@ const Footer = () => {
       },
     });
 
-    return () => {
-      marqueeTween.kill();
-    };
-  }, []);
+    return () => marqueeTween.kill();
+  }, [isMobile]);
 
   const textInstances = Array.from({ length: 10 }).map((_, i) => (
     <div
@@ -38,29 +46,38 @@ const Footer = () => {
       ref={(el) => (textRefs.current[i] = el)}
       className="whitespace-nowrap absolute top-1/2 -translate-y-1/2 flex items-center"
     >
-      {/* ✅ CustomPixelText should be React-safe */}
-      <CustomPixelText
-        textString="PJTALKS"
-        fontSizes={[300]}
-        canvasSizes={[{ w: 1520, h: 300 }]}
-        gapY={-200}
-        textAlignments={["center"]}
-        fontFamily="arial"
-        strokeWidth={0.4}
-        fontWeight=""
-      />
-      <sup className="text-[6vw] align-super -ml-24 -mt-[0vw] font-bold">
-        &copy;
-      </sup>
+      {isMobile ? (
+        // Mobile → Normal text
+        <p className="text-[12vw] tracking-widest font-bold uppercase font-[arial]">
+          PJTALKS<sup className="text-[4vw] align-super">&copy;</sup>
+        </p>
+      ) : (
+        // Desktop → Pixel distortion text
+        <CustomPixelText
+          textString="PJTALKS"
+          fontSizes={[300]}
+          canvasSizes={[{ w: 1520, h: 300 }]}
+          gapY={-200}
+          textAlignments={["center"]}
+          fontFamily="arial"
+          strokeWidth={0.4}
+          fontWeight=""
+        >
+          <sup className="text-[6vw] align-super -ml-24 -mt-[0vw] font-bold">
+            &copy;
+          </sup>
+        </CustomPixelText>
+      )}
     </div>
   ));
 
   return (
     <div className="w-full min-w-screen min-h-[35rem] h-auto px-4 flex flex-col justify-between font-[arial] pt-5 text-white max-sm:min-h-[15rem]">
-      <div className="flex items-center justify-between text-[15px] font-bold uppercase p-4 border-y border-gray-500 max-sm:flex-col max-sm:text-xs max-sm:items-end max-sm:gap-y-2] max-sm:px-0 max-[300px]:text-[3vw]">
+      {/* Top Footer Text */}
+      <div className="flex items-center justify-between text-[15px] font-bold uppercase p-4 border-y border-gray-500 max-sm:flex-col max-sm:text-xs max-sm:items-end max-sm:gap-y-2 max-sm:px-0 max-[300px]:text-[3vw]">
         <div>
           <TextRevealerOnScroll text="All rights reserved prashant joshi 2025">
-            <sup className="font-bold text-lg font-[arial">&reg;</sup>
+            <sup className="font-bold text-lg font-[arial]">&reg;</sup>
           </TextRevealerOnScroll>
         </div>
         <div>
@@ -70,6 +87,8 @@ const Footer = () => {
           />
         </div>
       </div>
+
+      {/* Marquee Text */}
       <div
         ref={containerRef}
         className="relative w-full h-[25vw] overflow-hidden max-sm:h-[35vw]"

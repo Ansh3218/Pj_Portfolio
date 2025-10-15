@@ -2,7 +2,6 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-// Global state (transition management)
 if (!window.transitionState) {
   window.transitionState = {
     isTransitioning: false,
@@ -16,7 +15,6 @@ const PageTransition = (OgComponent) => {
     const navigate = useNavigate();
     const [shouldTransition, setShouldTransition] = useState(false);
     const [transitionStage, setTransitionStage] = useState("initial");
-    // stages: initial → red → red-pause → red-down
 
     useEffect(() => {
       window.transitionState.startTransition = (newRoute) => {
@@ -27,7 +25,6 @@ const PageTransition = (OgComponent) => {
           setTransitionStage("red");
         }
       };
-
       return () => {
         window.transitionState.startTransition = null;
       };
@@ -42,7 +39,6 @@ const PageTransition = (OgComponent) => {
 
     return (
       <div className="relative min-h-screen w-full overflow-hidden">
-        {/* Page Content */}
         <AnimatePresence mode="wait">
           {!shouldTransition && (
             <motion.div
@@ -50,7 +46,7 @@ const PageTransition = (OgComponent) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 0.5, ease: "easeInOut" }}
+              transition={{ duration: 1, ease: "easeInOut" }}
               className="relative z-10"
             >
               <OgComponent {...props} />
@@ -58,7 +54,6 @@ const PageTransition = (OgComponent) => {
           )}
         </AnimatePresence>
 
-        {/* Curtain */}
         <AnimatePresence>
           {shouldTransition && (
             <motion.div
@@ -67,28 +62,24 @@ const PageTransition = (OgComponent) => {
               initial={{ y: "-100%", backgroundColor: "gray" }}
               animate={
                 transitionStage === "red"
-                  ? { y: "100%", backgroundColor: "gray" } // Slide down to cover
-                  : transitionStage === "red-pause"
-                  ? { y: "0%", backgroundColor: "gray" } // Stay full cover
+                  ? { y: "0%", backgroundColor: "gray" }
                   : transitionStage === "red-down"
-                  ? { y: "100%", backgroundColor: "gray" } // Slide down to bottom
+                  ? { y: "-100%", backgroundColor: "gray" }
                   : { y: "-100%" }
               }
-              transition={{ duration: 2, ease: "easeInOut" }}
+              transition={{ duration: 3, ease: "easeInOut" }} // Keep curtain animation duration unchanged
               onAnimationComplete={() => {
                 if (transitionStage === "red") {
-                  // Navigate exactly waise hi jaise tera original code me tha
                   const targetRoute = window.transitionState.pendingRoute;
-                  if (targetRoute) navigate(targetRoute);
-
-                  // Reset isTransitioning after small delay
-                  setTimeout(
-                    () => (window.transitionState.isTransitioning = false),
-                    50
-                  );
-
-                  // Pause 5s on full cover
-                  setTimeout(() => setTransitionStage("red-down"), 10000);
+                  if (targetRoute) {
+                    navigate(targetRoute);
+                    // Immediately trigger the reveal animation after navigation
+                    setTransitionStage("red");
+                  }
+                  // Reset transitioning state shortly after navigation
+                  setTimeout(() => {
+                    window.transitionState.isTransitioning = false;
+                  }, 50);
                 } else if (transitionStage === "red-down") {
                   handleTransitionComplete();
                 }
@@ -103,7 +94,6 @@ const PageTransition = (OgComponent) => {
   TransitionWrapper.displayName = `PageTransition(${
     OgComponent.displayName || OgComponent.name || "Component"
   })`;
-
   return TransitionWrapper;
 };
 

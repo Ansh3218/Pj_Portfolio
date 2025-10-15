@@ -4,9 +4,7 @@
   font-family: Timerfonts;
   src: url("/assets/Fonts/Chirp-Regular.ttf") format("truetype");
 }
-* {
-  cursor: none !important;
-}
+
 :root {
   --bg: #fff;
   --fg: #0a0a0a;
