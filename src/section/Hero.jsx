@@ -18,10 +18,10 @@ const Hero = () => {
         <div className="w-full max-w-[100vw] h-auto overflow-x-hidden">
           <ShortIntroduction />
         </div>
-        <MobileSizeText
+        {/* <MobileSizeText
           text={`\n \n WORK`}
           className="text-[28vw] hidden max-sm:block"
-        />
+        /> */}
         {/* <HeadingSection worktextRef={worktextRef} /> */}
         <Faq />
         <Footer />
