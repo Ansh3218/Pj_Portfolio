@@ -17,7 +17,7 @@ export default function TopHoverLine({
       if (window.matchMedia("(max-width: 400px)").matches) {
         setDynamicHeight("1px"); //  phones
       } else if (window.matchMedia("(max-width: 768px)").matches) {
-        setDynamicHeight("2px"); //  tablets
+        setDynamicHeight("1.5px"); //  tablets
       } else {
         setDynamicHeight("3px"); // desktops
       }
