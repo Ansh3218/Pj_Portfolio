@@ -25,7 +25,7 @@ const FAQItem = ({ question, answer }) => {
     <div className="border border-gray-700 mb-6 rounded-lg overflow-hidden w-full bg-gray-900 shadow-lg">
       {/* Question Row */}
       <button
-        className="w-full flex items-center justify-between px-8 py-5 text-left font-semibold text-xl text-white bg-black hover:bg-gray-800 transition-colors duration-300"
+        className="w-full flex items-center justify-between px-8 py-5 text-left font-semibold text-xl text-[#A3A38F] bg-black cursor-pointer hover:bg-gray-800 transition-colors duration-300"
         onClick={() => setOpen(!open)}
       >
         <span className="text-3xl max-sm:text-lg">{question}</span>

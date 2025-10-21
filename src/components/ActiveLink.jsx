@@ -95,11 +95,11 @@ const ActiveLink = ({ to = "/", label = "", onClick, key }) => {
       <TextHover
         text={label}
         disableBlink={isActive}
-        className="text-gray-100 font-semibold text-lg max-sm:text-xs"
+        className="text-[#A3A38F] font-semibold text-lg max-sm:text-xs"
       />
       <span
         ref={lineRef}
-        className="absolute top-0 left-0 h-[3px] w-full bg-[#FFFFFF]"
+        className="absolute top-0 left-0 h-[3px] w-full bg-[#A3A38F]"
       />
     </Link>
   );

@@ -14,7 +14,7 @@ const PjCanvasImg = () => {
   const containerRef = useRef(null);
   const wrapperRef = useRef(null);
 
-  const innerText = "KYA DEKH RAHA HA";
+  const innerText = "You're probably in the right place".toUpperCase();
   const innerChars = useMemo(() => innerText.split(""), [innerText]);
 
   useEffect(() => {
@@ -166,7 +166,7 @@ const PjCanvasImg = () => {
             />
 
             {/* Inner Text - Mobile Responsive */}
-            <div className="absolute text-center text-6xl font-bold text-white max-sm:text-4xl max-sm:px-2">
+            <div className="absolute text-center text-6xl font-bold text-gray-400 max-sm:text-4xl max-sm:px-2">
               <p className="overflow-hidden max-sm:leading-tight">
                 {innerChars.map((char, i) => (
                   <span key={i} className="inner-char inline-block">

@@ -1,14 +1,13 @@
 import { Canvas } from "@react-three/fiber";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import gsap from "gsap";
 
 const NavModel = ({ straighten, NavBoxHovered }) => {
-  const meshRef = useRef(); // reference to the 3D mesh
-  const curveRef = useRef(); // reference for the curve path
-  const animationRef = useRef(); // reference for GSAP animation
+  const meshRef = useRef();
+  const curveRef = useRef();
+  const animationRef = useRef();
 
-  // Initial curve points for the tube geometry
   const initialPoints = [
     new THREE.Vector3(-20, 0, 0),
     new THREE.Vector3(-18, 1, 0),
@@ -33,60 +32,60 @@ const NavModel = ({ straighten, NavBoxHovered }) => {
     new THREE.Vector3(20, 0, 0),
   ];
 
-  // Store animated points and original points
   const pointsRef = useRef(initialPoints.map((p) => p.clone()));
   const originalPoints = useRef(initialPoints.map((p) => p.clone()));
 
-  // Create a smooth curve path
   curveRef.current = new THREE.CatmullRomCurve3(pointsRef.current);
 
-  // Create tube geometry along the curve
   const tubeGeometry = useRef(
     new THREE.TubeGeometry(curveRef.current, 200, 0.15, 8, false)
   );
 
-  // Animate mesh moving left to right continuously
   useEffect(() => {
     if (meshRef.current) {
-      // Start from -4
       meshRef.current.position.x = -4;
 
-      // Infinite loop animation along x-axis
       animationRef.current = gsap.timeline({
         repeat: -1,
-        paused: straighten, // paused if straighten = true
+        paused: false, // 👈 Initially false rakho
       });
+
       animationRef.current.to(meshRef.current.position, {
         x: 4,
         duration: 2.6,
         ease: "linear",
         onComplete: () => {
-          // Reset instantly for seamless loop
           gsap.set(meshRef.current.position, { x: -4 });
         },
       });
     }
 
     return () => {
-      if (animationRef.current) animationRef.current.kill(); // cleanup GSAP
+      if (animationRef.current) animationRef.current.kill();
     };
   }, []);
 
-  // Toggle between straight and curved line
+  // 👇 Yeh effect straighten prop ke change pe trigger hoga
   useEffect(() => {
+    console.log("Straighten changed:", straighten); // Debug ke liye
+
     if (animationRef.current) {
-      straighten ? animationRef.current.pause() : animationRef.current.resume();
+      if (straighten) {
+        animationRef.current.pause();
+      } else {
+        animationRef.current.resume();
+      }
     }
 
     // Animate curve points
     pointsRef.current.forEach((point, index) => {
       const targetY = straighten ? 0 : originalPoints.current[index].y;
+
       gsap.to(point, {
         y: targetY,
         duration: 0.8,
         ease: "power2.out",
         onUpdate: () => {
-          // Update curve and regenerate geometry
           curveRef.current = new THREE.CatmullRomCurve3(pointsRef.current);
           tubeGeometry.current.dispose();
           tubeGeometry.current = new THREE.TubeGeometry(
@@ -102,9 +101,8 @@ const NavModel = ({ straighten, NavBoxHovered }) => {
         },
       });
     });
-  }, [straighten]);
+  }, [straighten]); // 👈 Dependency array mein straighten hai
 
-  // Change color on hover (⚠️ keep this black/gray as it is, no white replacement)
   useEffect(() => {
     if (meshRef.current) {
       const targetColor = NavBoxHovered
@@ -125,7 +123,7 @@ const NavModel = ({ straighten, NavBoxHovered }) => {
     <mesh
       ref={meshRef}
       geometry={tubeGeometry.current}
-      position={[-4, -0.2, 3.2]} // mesh positioned slightly below
+      position={[-4, -0.2, 3.2]}
     >
       <meshStandardMaterial />
     </mesh>
@@ -135,7 +133,7 @@ const NavModel = ({ straighten, NavBoxHovered }) => {
 const NavBox = ({ straighten, NavBoxHovered }) => {
   return (
     <Canvas gl={{ powerPreference: "high-performance" }}>
-      <ambientLight intensity={2} /> {/* white light for illumination */}
+      <ambientLight intensity={2} />
       <NavModel straighten={straighten} NavBoxHovered={NavBoxHovered} />
     </Canvas>
   );

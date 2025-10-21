@@ -7,9 +7,14 @@ import Work from "./Work";
 import LenisScroll from "../components/LenisScroll";
 import ErrorBoundary from "../components/ErrorBoundary";
 import ScrollToTop from "../components/ScrollToTop";
-// import { useEffect, useRef } from "react";
+import NotFoundPage from "../components/NotFoundPage";
 
 function Home() {
+  const location = useLocation(); // 👈 Current route check karne ke liye
+  const is404Page = !["/", "/about", "/contact", "/work"].includes(
+    location.pathname
+  );
+
   const handleRouteError = (error, errorInfo, sectionName) => {
     const currentPath = window.location.pathname;
     console.group(`🚨 Route Error - ${sectionName} (${currentPath})`);
@@ -29,15 +34,18 @@ function Home() {
       onError={handleRouteError}
     >
       <LenisScroll>
-        {/* 👇 Yeh har route change pe top pe scroll karega */}
         <ScrollToTop />
-        <ErrorBoundary
-          name="Navigation Bar"
-          section="navbar"
-          onError={handleRouteError}
-        >
-          <Navbar />
-        </ErrorBoundary>
+
+        {/* 👇 404 page pe Navbar show nahi hoga */}
+        {!is404Page && (
+          <ErrorBoundary
+            name="Navigation Bar"
+            section="navbar"
+            onError={handleRouteError}
+          >
+            <Navbar />
+          </ErrorBoundary>
+        )}
 
         <Routes>
           <Route
@@ -96,25 +104,7 @@ function Home() {
                 section="not-found"
                 onError={handleRouteError}
               >
-                <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-                  <div className="text-center p-8">
-                    <h1 className="text-6xl font-bold text-gray-700 mb-4">
-                      404
-                    </h1>
-                    <h2 className="text-2xl font-semibold text-gray-600 mb-4">
-                      Page Not Found
-                    </h2>
-                    <p className="text-gray-500 mb-6">
-                      The page you're looking for doesn't exist.
-                    </p>
-                    <a
-                      href="/"
-                      className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-lg font-medium transition-colors"
-                    >
-                      Go Home
-                    </a>
-                  </div>
-                </div>
+                <NotFoundPage />
               </ErrorBoundary>
             }
           />

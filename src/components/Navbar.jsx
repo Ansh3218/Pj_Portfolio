@@ -9,10 +9,10 @@ const Navbar = () => {
   const topRef = useRef();
   const bottomRef = useRef();
 
-  const handleClick = (e) => {
-    e.preventDefault(); // Default navigation रोको
-    window.transitionState.startTransition(to); // ✅ Transition trigger
-  };
+const handleClick = () => {
+  setStraighten(!straighten);
+  console.log("Clicked! Straighten:", !straighten); // Debug
+};
 
   const openDoors = () => {
     setNavBoxHovered(true);

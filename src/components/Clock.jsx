@@ -47,7 +47,7 @@ export default function TwentyFourHourClock({
   return (
     // Force text color to dull/off-white (#F5F5F5)
     <div
-      className={`${className} text-[#F5F5F5]`}
+      className={`${className} text-[#A3A38F]`}
       aria-label="current-time"
       key={key}
     >

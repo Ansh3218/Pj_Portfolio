@@ -72,7 +72,7 @@ const Footer = () => {
   ));
 
   return (
-    <div className="w-full min-w-screen min-h-[35rem] h-auto px-4 flex flex-col justify-between font-[arial] pt-5 text-white max-sm:min-h-[15rem]">
+    <div className="w-full min-w-screen min-h-[35rem] h-auto px-4 flex flex-col justify-between font-[arial] pt-5 text-[#A3A38F] max-sm:min-h-[15rem]">
       {/* Top Footer Text */}
       <div className="flex items-center justify-between text-[15px] font-bold uppercase p-4 border-y border-gray-500 max-sm:flex-col max-sm:text-xs max-sm:items-end max-sm:gap-y-2 max-sm:px-0 max-[300px]:text-[3vw]">
         <div>

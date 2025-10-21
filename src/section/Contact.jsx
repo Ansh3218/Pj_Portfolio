@@ -2,7 +2,7 @@ import CustomPixelText from "../components/CustomPixelText";
 import Clock from "../components/Clock";
 import "../index.css";
 import TopHoverLine from "../components/TopHoverLine";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import TextBlinkHover from "../components/TextBlinkHover";
 import Footer from "../components/Footer";
 import { TextRevealer } from "../components/RevealTextAnimation"; // ✅ fixed
@@ -16,10 +16,16 @@ const Contact = ({
   lineColor = "",
 }) => {
   const links = [
-    { name: "Instagram", url: "#" },
-    { name: "Youtube", url: "#" },
-    { name: "Twitter", url: "#" },
-    { name: "Facebook", url: "#" },
+    {
+      name: "Instagram",
+      url: "https://www.instagram.com/pj_talks_?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+    },
+    { name: "Youtube", url: "https://www.youtube.com/@pjtalks" },
+    { name: "Twitter", url: "https://x.com/pj_talks_" },
+    {
+      name: "Facebook",
+      url: "https://www.facebook.com/prashantpjtalks?rdid=67Lj88GvtRsR30wU&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F16wFyfjtkj%2F#",
+    },
   ];
 
   return (
@@ -64,7 +70,7 @@ const Contact = ({
               <TopHoverLine lineColor={lineColor ? lineColor : "#9B9B88"}>
                 <div className="flex items-center gap-3 pt-3 text-xl font-semibold w-[40rem] max-sm:text-xs">
                   <span className="h-[5px] w-6 mt-1.5"></span>
-                  <TextRevealer text="pj@example.com" />
+                    <TextRevealer  text="pj@example.com" />
                 </div>
               </TopHoverLine>
             </div>
@@ -73,6 +79,7 @@ const Contact = ({
             <div className="flex flex-col gap-0 my-5 w-1/2 p-4 max-sm:w-full max-sm:items-end max-sm:gap-y-1">
               {links.map((link, i) => (
                 <Link
+                  target="_blank"
                   key={i}
                   to={link.url}
                   className="flex items-center gap-3 w-1/3 font-semibold text-lg group max-sm:gap-0 max-sm:text-xs"
