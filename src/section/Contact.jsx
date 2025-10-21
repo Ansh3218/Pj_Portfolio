@@ -70,7 +70,9 @@ const Contact = ({
               <TopHoverLine lineColor={lineColor ? lineColor : "#9B9B88"}>
                 <div className="flex items-center gap-3 pt-3 text-xl font-semibold w-[40rem] max-sm:text-xs">
                   <span className="h-[5px] w-6 mt-1.5"></span>
-                    <TextRevealer  text="pj@example.com" />
+                  <a target="_blank" href="mailto:pj@example.com">
+                    <TextRevealer text="pj@example.com" />
+                  </a>
                 </div>
               </TopHoverLine>
             </div>
