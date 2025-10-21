@@ -14,7 +14,7 @@ const Hero = () => {
     <>
       <div className="h-auto max-w-screen min-h-screen w-full">
         <ShowCaseCanvas />
-        <VideoSection />
+        {/* <VideoSection /> */}
         <div className="w-full max-w-[100vw] h-auto overflow-x-hidden">
           <ShortIntroduction />
         </div>

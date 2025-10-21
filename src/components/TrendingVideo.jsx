@@ -9,7 +9,6 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText } from "gsap/SplitText";
 import SplitType from "split-type";
-// import TrendingVideoPreview from "../../public/assets/Video/pj_trending.mp4";
 import { TextRevealerOnScroll } from "./RevealTextAnimation";
 import CustomPixelText from "./CustomPixelText";
 
