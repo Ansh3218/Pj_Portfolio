@@ -1,176 +1,254 @@
-import React, { useEffect, useRef } from "react";
-import { gsap } from "gsap";
+import React, { useState, useEffect, useMemo } from "react";
+import { motion, useSpring, useTransform } from "motion/react";
 
-const ModernLoader = () => {
-  // 🔹 Refs setup
-  const containerRef = useRef(null); // Loader ke overall container ke liye
-  const linesRef = useRef([]); // Animated lines store karne ke liye
-  const contentRef = useRef(null); // Text aur logo area ke liye
+function RollingNumber({ mv, number, height }) {
+  let y = useTransform(mv, (latest) => {
+    let placeValue = latest % 10;
+    let offset = (10 + number - placeValue) % 10;
+    let value = offset * height;
+    if (offset > 5) value -= 10 * height;
+    return value;
+  });
 
-  useEffect(() => {
-    const container = containerRef.current;
+  return (
+    <motion.span
+      style={{
+        position: "absolute",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        y,
+        fontVariantNumeric: "tabular-nums",
+      }}
+    >
+      {number}
+    </motion.span>
+  );
+}
 
-    // 🔹 5 horizontal lines dark gradients ke sath
-    const numLines = 5;
-    const colors = [
-      "linear-gradient(90deg, #000000 0%, #1a1a1a 50%, #000000 100%)",
-      "linear-gradient(90deg, #0a0a0a 0%, #262626 50%, #0a0a0a 100%)",
-      "linear-gradient(90deg, #111111 0%, #333333 50%, #111111 100%)",
-      "linear-gradient(90deg, #1a1a1a 0%, #3d3d3d 50%, #1a1a1a 100%)",
-      "linear-gradient(90deg, #000000 0%, #444444 50%, #000000 100%)",
-    ];
-
-    // 🔹 Loop me lines create kar rahe hai
-    for (let i = 0; i < numLines; i++) {
-      const line = document.createElement("div");
-      line.className = "absolute left-0 right-0"; // Full width line
-      line.style.height = "2px"; // Thin horizontal line
-      line.style.background = colors[i]; // Gradient color apply
-      line.style.transformOrigin = "center"; // Animation center se ho
-      line.style.boxShadow = "0 0 10px rgba(255, 255, 255, 0.15)"; // Soft glow
-
-      // 🔹 Alternate lines top aur bottom se place kar rahe hai
-      if (i % 2 === 0) {
-        line.style.top = `${(i / numLines) * 100}%`;
-      } else {
-        line.style.bottom = `${((numLines - 1 - i) / numLines) * 100}%`;
-      }
-
-      // Lines ko store aur container me add kar diya
-      linesRef.current.push(line);
-      container.appendChild(line);
-    }
-
-    // 🔹 GSAP animation timeline
-    const tl = gsap.timeline({
-      onComplete: () => gsap.set(container, { display: "none" }), // End me loader hide
+function RollingDigit({ place, value, height, digitWidth }) {
+  if (place === 100) {
+    const smoothTrigger = Math.max(0, value - 90);
+    let animatedValue = useSpring(smoothTrigger, {
+      stiffness: 90,
+      damping: 16,
     });
 
-    // ⚡ Animation Steps
-    tl.from(linesRef.current, {
-      scaleX: 0, // Lines left-right se grow hoti hai
-      duration: 1.5,
-      stagger: 0.15, // Ek ke baad ek line animate hoti hai
-      ease: "power2.inOut",
-    })
-      .to({}, { duration: 0.8 }) // Short delay
+    useEffect(() => {
+      animatedValue.set(Math.max(0, value - 90));
+    }, [value, animatedValue]);
 
-      // Lines vertically expand hoti hain (height badhti hai)
-      .to(linesRef.current, {
-        height: "30vh",
-        duration: 2.5,
-        ease: "power3.inOut",
-      })
+    return (
+      <div
+        style={{
+          height,
+          width: digitWidth,
+          position: "relative",
+          overflow: "hidden",
+          fontVariantNumeric: "tabular-nums",
+        }}
+      >
+        {Array.from({ length: 10 }, (_, i) => (
+          <RollingNumber
+            key={i}
+            mv={animatedValue}
+            number={i}
+            height={height}
+          />
+        ))}
+      </div>
+    );
+  }
 
-      // Thoda shadow adjust for subtle glow effect
-      .to(
-        linesRef.current,
-        {
-          boxShadow: "0 0 5px rgba(255, 255, 255, 0.2)",
-          duration: 1.5,
-          ease: "power2.out",
-        },
-        "-=2.5" // Parallel animation timing
-      )
+  let animatedValue = useSpring(value / place, { stiffness: 90, damping: 10 });
 
-      // Text ("LOADING...") fade in and move up
-      .from(
-        contentRef.current,
-        {
-          opacity: 0,
-          y: 30,
-          duration: 1.5,
-          ease: "power2.out",
-        },
-        "-=1.5"
-      )
-
-      // Logo animation (scale up thoda bounce ke sath)
-      .from(
-        contentRef.current.querySelector(".logo"),
-        {
-          scale: 0.9,
-          duration: 1,
-          ease: "back.out(1.3)",
-        },
-        "-=1.2"
-      )
-
-      .to({}, { duration: 1 }) // Small pause before exit
-
-      // 🔹 Lines exit animation (alternate lines left/right move hoti hain)
-      .to(
-        linesRef.current.filter((_, i) => i % 2 === 0),
-        {
-          x: "-100vw",
-          duration: 2,
-          ease: "power2.inOut",
-        }
-      )
-      .to(
-        linesRef.current.filter((_, i) => i % 2 !== 0),
-        {
-          x: "100vw",
-          duration: 1.5,
-          ease: "power2.inOut",
-        },
-        "-=1.5"
-      )
-
-      // Text fade-out ho jaata hai jab lines move kar rahi hoti hain
-      .to(
-        contentRef.current,
-        {
-          opacity: 0,
-          y: -30,
-          duration: 1,
-          ease: "power2.in",
-        },
-        "-=1"
-      )
-
-      // Pura container fade-out ho jaata hai end me
-      .to(container, {
-        opacity: 0,
-        duration: 10,
-      });
-
-    // 🔹 Cleanup — lines DOM se remove kar do jab component unmount ho
-    return () => linesRef.current.forEach((line) => line.remove());
-  }, []);
+  useEffect(() => {
+    animatedValue.set(value / place);
+  }, [value, place, animatedValue]);
 
   return (
     <div
-      ref={containerRef}
-      className="fixed inset-0 flex items-center justify-center bg-black z-50 overflow-hidden"
+      style={{
+        height,
+        width: digitWidth,
+        position: "relative",
+        overflow: "hidden",
+        fontVariantNumeric: "tabular-nums",
+      }}
     >
-      {/* 🔹 Right-side soft gray glow for modern look */}
-      <div className="absolute top-0 right-0 w-[400px] h-full bg-gradient-to-l from-gray-600 via-gray-700 to-black opacity-20 blur-[150px]"></div>
-
-      {/* 🔹 Subtle noise overlay — realistic texture ke liye */}
-      <div
-        className="absolute inset-0 opacity-[0.02]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' /%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-        }}
-      ></div>
-
-      {/* 🔹 Loader text content */}
-      <div ref={contentRef} className="relative z-10 text-center">
-        <div className="logo mb-6">
-          {/* Optional: “LOADING” big text (commented out) */}
-          {/* <h1 className="text-8xl font-light text-white tracking-[0.3em] mb-2">LOADING</h1> */}
-          {/* Small separator line */}
-          <div className="h-px w-32 mx-auto bg-gradient-to-r from-transparent via-gray-500 to-transparent"></div>
-        </div>
-        {/* Subtext */}
-        <p className="text-2xl text-gray-400 tracking-[0.4em] font-light uppercase">
-          LOADING...
-        </p>
-      </div>
+      {Array.from({ length: 10 }, (_, i) => (
+        <RollingNumber key={i} mv={animatedValue} number={i} height={height} />
+      ))}
     </div>
   );
-};
+}
 
-export default ModernLoader;
+export default function Loader() {
+  const [progress, setProgress] = useState(0);
+  const [dimensions, setDimensions] = useState({
+    height: 250,
+    fontSize: "18vw",
+    digitWidth: "1ch",
+  });
+
+  // Responsive & Dynamic Width Calculation
+  useEffect(() => {
+    const updateDimensions = () => {
+      const width = window.innerWidth;
+      let height, fontSize, digitWidth;
+
+      if (width < 480) {
+        // Mobile Small
+        height = 160;
+        fontSize = "32vw";
+        digitWidth = "0.95ch";
+      } else if (width < 640) {
+        // Mobile
+        height = 200;
+        fontSize = "30vw";
+        digitWidth = "1ch";
+      } else if (width < 768) {
+        // Tablet
+        height = 180;
+        fontSize = "24vw";
+        digitWidth = "1.05ch";
+      } else if (width < 1024) {
+        // Small Desktop
+        height = 220;
+        fontSize = "20vw";
+        digitWidth = "1.1ch";
+      } else {
+        // Large Desktop
+        height = 280;
+        fontSize = "18vw";
+        digitWidth = "1.15ch";
+      }
+
+      setDimensions({ height, fontSize, digitWidth });
+    };
+
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions);
+    return () => window.removeEventListener("resize", updateDimensions);
+  }, []);
+
+  // Progress animation
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setProgress((p) => (p >= 100 ? 100 : p + 1));
+    }, 80);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="min-h-screen w-full bg-black text-white relative overflow-hidden select-none">
+      {/* BG Blobs */}
+      <div className="absolute inset-0 opacity-25">
+        <div className="absolute top-0 left-1/4 w-96 h-96 sm:w-[500px] sm:h-[500px] lg:w-[600px] lg:h-[600px] bg-white/15 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute top-1/3 right-1/4 w-80 h-80 sm:w-[450px] sm:h-[450px] lg:w-[550px] lg:h-[550px] bg-white/10 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-1/3 w-96 h-96 sm:w-[520px] sm:h-[520px] lg:w-[620px] lg:h-[620px] bg-white/12 rounded-full blur-[120px] animate-blob animation-delay-4000"></div>
+      </div>
+
+      {/* Floating Dots */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {useMemo(
+          () =>
+            [...Array(28)].map((_, i) => {
+              const duration = 12 + Math.random() * 8;
+              const delay = Math.random() * 1;
+
+              return (
+                <div
+                  key={i}
+                  className="absolute w-[2px] h-[2px] bg-white rounded-full opacity-30"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                    animation: `float ${duration}s ease-in-out infinite`,
+                    animationDelay: `${delay}s`,
+                  }}
+                />
+              );
+            }),
+          []
+        )}
+      </div>
+
+      {/* Rolling Number - Fully Responsive & No Collapse */}
+      <div className="absolute bottom-8 right-8 flex items-end justify-end">
+        <div
+          className="flex items-center justify-center tracking-tight select-none"
+          style={{
+            fontWeight: 900,
+            lineHeight: 0.8,
+            fontSize: dimensions.fontSize,
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {[100, 10, 1].map((place) => (
+            <RollingDigit
+              key={place}
+              place={place}
+              value={progress}
+              height={dimensions.height}
+              digitWidth={dimensions.digitWidth}
+            />
+          ))}
+
+          <span
+            className="opacity-40 ml-1"
+            style={{
+              fontSize: `calc(${dimensions.fontSize} * 0.9)`,
+              marginBottom: "0.1em",
+            }}
+          >
+            %
+          </span>
+        </div>
+      </div>
+
+      {/* Tailwind + CSS Animations */}
+      <style jsx>{`
+        @keyframes blob {
+          0%,
+          100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(40px, -60px) scale(1.1);
+          }
+          66% {
+            transform: translate(-40px, 50px) scale(0.9);
+          }
+        }
+        .animate-blob {
+          animation: blob 9s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+
+        @keyframes float {
+          0% {
+            transform: translateY(0);
+            opacity: 0;
+          }
+          30% {
+            opacity: 0.45;
+          }
+          80% {
+            opacity: 0.3;
+          }
+          100% {
+            transform: translateY(-140vh) translateX(60px);
+            opacity: 0;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}

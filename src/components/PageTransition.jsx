@@ -46,7 +46,7 @@ const PageTransition = (OgComponent) => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              transition={{ duration: 1, ease: "easeInOut" }}
+              transition={{ duration: 0.6, ease: "easeInOut" }}
               className="relative z-10"
             >
               <OgComponent {...props} />
@@ -67,7 +67,7 @@ const PageTransition = (OgComponent) => {
                   ? { y: "-100%", backgroundColor: "gray" }
                   : { y: "-100%" }
               }
-              transition={{ duration: 3, ease: "easeInOut" }} // Keep curtain animation duration unchanged
+              transition={{ duration: 1.8, ease: "easeInOut" }} // Keep curtain animation duration unchanged
               onAnimationComplete={() => {
                 if (transitionStage === "red") {
                   const targetRoute = window.transitionState.pendingRoute;
