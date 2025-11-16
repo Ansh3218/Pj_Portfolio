@@ -152,7 +152,7 @@ const PjCanvasImg = () => {
                 : PjCanvasImage
             }
             alt="canvas bg"
-            className="h-full w-full object-cover max-sm:object-center"
+            className="h-full w-full object-contain max-sm:object-center"
             style={{ transformOrigin: "center center" }}
           />
 
