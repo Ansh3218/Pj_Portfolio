@@ -14,7 +14,7 @@ const App = () => {
       sessionStorage.setItem("visited", "true");
       const timer = setTimeout(() => {
         setShowLoader(false);
-      }, 9000);
+      }, 3000);
 
       // Log for debugging
       console.log("Loader effect: Started timer");

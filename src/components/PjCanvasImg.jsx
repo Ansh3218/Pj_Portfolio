@@ -146,7 +146,11 @@ const PjCanvasImg = () => {
           {/* Background Canvas Image - Fully Responsive */}
           <img
             ref={canvasImgRef}
-            src={PjCanvasImage}
+            src={
+              window.innerWidth <= 640
+                ? "/public/assets/Images/PjCanvas_mobile.png"
+                : PjCanvasImage
+            }
             alt="canvas bg"
             className="h-full w-full object-cover max-sm:object-center"
             style={{ transformOrigin: "center center" }}
@@ -162,7 +166,7 @@ const PjCanvasImg = () => {
             <img
               src={PjImage}
               alt="masked pj"
-              className="w-full h-full object-cover max-sm:object-[-35rem]"
+              className="w-full h-full object-cover max-sm:object-[-50rem]"
             />
 
             {/* Inner Text - Mobile Responsive */}

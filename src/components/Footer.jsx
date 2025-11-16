@@ -2,6 +2,7 @@ import gsap from "gsap";
 import React, { useEffect, useRef, useState } from "react";
 import CustomPixelText from "./CustomPixelText";
 import { TextRevealerOnScroll } from "./RevealTextAnimation";
+import "../index.css";
 
 const Footer = () => {
   const containerRef = useRef(null);
@@ -48,8 +49,11 @@ const Footer = () => {
     >
       {isMobile ? (
         // Mobile → Normal text
-        <p className="text-[12vw] tracking-widest font-bold uppercase font-[arial]">
-          PJTALKS<sup className="text-[4vw] align-super">&copy;</sup>
+        <p
+          className="text-[12vw] tracking-widest font-bold uppercase font-[arial]
+          .text-footer"
+        >
+          PJTALKS
         </p>
       ) : (
         // Desktop → Pixel distortion text
@@ -62,11 +66,7 @@ const Footer = () => {
           fontFamily="arial"
           strokeWidth={0.4}
           fontWeight=""
-        >
-          <sup className="text-[6vw] align-super -ml-24 -mt-[0vw] font-bold">
-            &copy;
-          </sup>
-        </CustomPixelText>
+        />
       )}
     </div>
   ));
@@ -91,7 +91,7 @@ const Footer = () => {
       {/* Marquee Text */}
       <div
         ref={containerRef}
-        className="relative w-full h-[25vw] overflow-hidden max-sm:h-[35vw]"
+        className="relative w-full h-[25vw] text-[#A3A38F] overflow-hidden max-sm:h-[35vw]"
       >
         {textInstances}
       </div>

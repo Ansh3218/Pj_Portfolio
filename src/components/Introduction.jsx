@@ -68,14 +68,13 @@ export const LongIntroduction = () => {
 
         {/* Experience Section */}
         <div className="max-sm:flex max-sm:flex-row-reverse max-sm:items-center max-sm:justify-between max-sm:flex-1">
-          <p className="max-sm:text-lg max-sm:text-gray-400 max-sm:text-end max-sm:w-full max-sm:p-[6vw]">
+          <p className="max-sm:text-lg max-sm:text-gray-400 max-sm:text-end max-sm:w-full max-sm:p-[8vw]">
             learning, experimenting, <br /> + years of experience
           </p>
           <div className="max-sm:w-1/3">
-            <MobileSizeText
-              text="5"
-              className="max-sm:text-[8rem] max-sm:leading-none max-sm:inline-block max-sm:m-auto max-sm:w-full max-sm:pl-[6vw]"
-            />
+            <h1 className="font-black text-[#acacac] max-sm:text-[8rem] max-sm:leading-none max-sm:inline-block max-sm:m-auto max-sm:w-full max-sm:pl-[20vw]">
+              5
+            </h1>{" "}
           </div>
         </div>
       </div>
@@ -97,7 +96,7 @@ export const ShortIntroduction = () => {
             duration={1.2}
             reverseOnScroll={true}
             stagger={0.03}
-            text={`I’m a video editor with 5+ years of experience—started back in 2018 on Kinemaster, now \n rolling with Premiere Pro & After Effects. Worked with 50+ clients across India and \n abroad, edited everything from short-form reels to full-length films, and even pulled \n off a viral short film that hit millions of views (1.1M+ on my own YouTube). My thing? \n  Turning raw footage into stories that people actually want to watch and share.
+            text={`I’m a video editor with 5+ years of experience started back in 2018 on Kinemaster, now \n rolling with Premiere Pro & After Effects. Worked with 50+ clients across India and \n abroad, edited everything from short-form reels to full-length films, and even pulled \n off a viral short film that hit millions of views (1.1M+ on my own YouTube). My thing? \n  Turning raw footage into stories that people actually want to watch and share.
 `}
             className="text-lg text-center m-auto pt-6 overflow-hidden"
           />
@@ -105,20 +104,20 @@ export const ShortIntroduction = () => {
       </div>
 
       {/* Mobile Layout */}
-      <div className="hidden max-sm:flex max-sm:flex-col max-sm:min-h-[70vh] max-sm:w-full max-sm:bg-black max-sm:text-gray-300 max-sm:justify-center max-sm:items-center max-sm:p-4">
+      <div className="hidden max-sm:flex max-sm:flex-col max-sm:min-h-[60vh] max-sm:w-full max-sm:bg-black max-sm:text-[#A3A38F] max-sm:justify-center max-sm:items-center max-sm:p-4">
         <div className="max-sm:text-center max-sm:w-full">
-          <div className="max-sm:text-lg max-sm:text-gray-400 max-sm:font-semibold max-sm:font-[poppins] max-sm:mb-6">
-            <h1>(About)</h1>
+          <div className="max-sm:text-lg max-sm:text-[#A3A38F] max-sm:font-semibold max-sm:font-[poppins] max-sm:mb-6">
+            <h1 className="text-[#A3A38F]">(About)</h1>
           </div>
 
-          <p className="max-sm:text-base max-sm:text-center max-sm:px-4 max-sm:leading-relaxed max-sm:max-w-md max-sm:mx-auto">
-            I’m a video editor with 5+ years of experience—started back in 2018
-            on Kinemaster, now rolling with Premiere Pro & After Effects.
-            Worked with 50+ clients across India and abroad, edited
-            everything from short-form reels to full-length films, and even
-            pulled off a viral short film that hit millions of views (1.1M+
-            on my own YouTube). My thing? Turning raw footage into stories
-            that people actually want to watch and share.
+          <p className="max-sm:text-base max-sm:text-justify max-sm:px-2 max-sm:leading-relaxed max-sm:max-w-md max-sm:mx-auto">
+            I’m a video editor with 5+ years of experience started back in 2018
+            on Kinemaster, now rolling with Premiere Pro & After Effects. Worked
+            with 50+ clients across India and abroad, edited everything from
+            short-form reels to full-length films, and even pulled off a viral
+            short film that hit millions of views (1.1M+ on my own YouTube). My
+            thing? Turning raw footage into stories that people actually want to
+            watch and share.
           </p>
         </div>
       </div>

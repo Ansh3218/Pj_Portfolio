@@ -13,14 +13,14 @@ const VideoGallery = () => {
   useGSAP(() => {
     gsap.fromTo(
       ".hero",
-      { height: "60px" },
+      { height: "100px" },
       {
-        height: "550px",
+        height: "600px",
         stagger: 0.2, // har row ke liye stagger
         scrollTrigger: {
           trigger: ".lol",
           start: "top 90%",
-          end: "top -150%",
+          end: "top -190%",
           scrub: true,
         },
       }
@@ -51,7 +51,7 @@ const VideoGallery = () => {
           <div
             key={idx}
             className="hero w-full mb-[5vh] overflow-hidden"
-            style={{ height: "60px" }} // inline style for GSAP animation
+            style={{ height: "80px" }} // inline style for GSAP animation
           >
             <ProjectCard videos={rowVideos} />
           </div>

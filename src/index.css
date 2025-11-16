@@ -63,3 +63,15 @@ body::-webkit-scrollbar {
 .icon {
   border-radius: 5rem;
 }
+
+.text-footer {
+  color: #A3A38F !important;
+}
+/* FRONT MODEL DRAG  */
+canvas {
+  touch-action: none;
+}
+
+body {
+  touch-action: pan-y;
+}

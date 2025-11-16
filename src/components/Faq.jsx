@@ -133,29 +133,53 @@ const Faq = () => {
     );
   }, []);
 
+  const isMobile = typeof window !== "undefined" && window.innerWidth < 640;
+
+  // Responsive pixel heading size
+  const canvasW = isMobile ? window.innerWidth - 40 : 1520;
+  const canvasH = isMobile ? 90 : 200;
+
+  const fontSizeQUESTION = isMobile ? 42 : 220;
+  const fontSizeEVERYTHING = isMobile ? 40 : 200;
+
   return (
-    <div className="w-full min-h-full h-auto text-white bg-gray-950">
+    <div className="w-full min-h-full h-auto text-[#A3A38F] bg-gray-950">
       {/* Animated heading */}
       <div className="text-container text-center">
-        <div ref={questionRef1} className="pt-32">
-          <CustomPixelText
-            textString="QUESTION"
-            fontSizes={[220]}
-            fontFamily="arial"
-            fontWeight=""
-            textAlignments={["center"]}
-            canvasSizes={[{ w: 1520, h: 200 }]}
-          />
+        {/* QUESTION */}
+        <div ref={questionRef1} className="py-8 flex justify-center">
+          {isMobile ? (
+            <h2 className="text-[15vw] font-bold text-[#A3A38F] leading-[1.1] tracking-wide">
+              QUESTION
+            </h2>
+          ) : (
+            <CustomPixelText
+              textString="QUESTION"
+              fontSizes={[fontSizeQUESTION]}
+              fontFamily="arial"
+              canvasSizes={[{ w: canvasW, h: canvasH }]}
+              fontWeight=""
+              textAlignments={["center"]}
+            />
+          )}
         </div>
-        <div ref={questionRef2}>
-          <CustomPixelText
-            textString="EVERYTHING"
-            fontSizes={[200]}
-            fontWeight=""
-            fontFamily="arial"
-            textAlignments={["center"]}
-            canvasSizes={[{ w: 1520, h: 200 }]}
-          />
+
+        {/* EVERYTHING */}
+        <div ref={questionRef2} className="flex justify-center mt-[-20px]">
+          {isMobile ? (
+            <h2 className="text-[15vw] font-bold text-[#A3A38F] leading-[1.1] tracking-wide">
+              EVERYTHING
+            </h2>
+          ) : (
+            <CustomPixelText
+              textString="EVERYTHING"
+              fontSizes={[fontSizeEVERYTHING]}
+              fontFamily="arial"
+              canvasSizes={[{ w: canvasW, h: canvasH }]}
+              fontWeight=""
+              textAlignments={["center"]}
+            />
+          )}
         </div>
       </div>
 
