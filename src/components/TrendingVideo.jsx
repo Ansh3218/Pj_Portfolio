@@ -390,7 +390,6 @@ export const DescriptionSection = ({ videoTextRef }) => {
             start: "top 100%",
             end: "bottom 50%",
             scrub: 0.2,
-            markers: true,
             toggleActions: "play none none reverse",
           },
         });
