@@ -11,21 +11,33 @@ const VideoGallery = () => {
   gsap.registerPlugin(ScrollTrigger);
 
   useGSAP(() => {
-    gsap.fromTo(
-      ".hero",
-      { height: "100px" },
-      {
-        height: "600px",
-        stagger: 0.2, // har row ke liye stagger
-        scrollTrigger: {
-          trigger: ".lol",
-          start: "top 90%",
-          end: "top -190%",
-          scrub: true,
+    // Har row ko individually animate karo
+    gsap.utils.toArray(".hero").forEach((element, index) => {
+      gsap.fromTo(
+        element,
+        {
+          height: "100px",
+          opacity: 0.5,
         },
-      }
-    );
-  });
+        {
+          height: "600px",
+          opacity: 1,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: element,
+            start: "top 95%", // jab element bottom me aye tab start
+            end: "top 20%", // jab element top pe aye tab end
+            scrub: 1,
+            // markers: true, // debugging ke liye uncomment karo
+            toggleActions: "play none none reverse",
+          },
+        }
+      );
+    });
+
+    // Refresh ScrollTrigger after setup
+    ScrollTrigger.refresh();
+  }, []);
 
   // 2 videos per row
   const rows = [];
@@ -51,13 +63,12 @@ const VideoGallery = () => {
           <div
             key={idx}
             className="hero w-full mb-[5vh] overflow-hidden"
-            style={{ height: "80px" }} // inline style for GSAP animation
+            style={{ height: "100px" }} // initial height
           >
             <ProjectCard videos={rowVideos} />
           </div>
         ))}
       </div>
-
       <Outlet />
     </div>
   );
