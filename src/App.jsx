@@ -3,10 +3,12 @@ import Home from "./section/Home";
 import Loader from "./components/Loader";
 import "../src/index.css";
 import { AnimatePresence } from "framer-motion";
+import Maintenance from "./components/Maintenance";
 
 const App = () => {
   const isFirstVisit = !sessionStorage.getItem("visited");
   const [showLoader, setShowLoader] = useState(isFirstVisit);
+  const MAINT = "true";
 
   useEffect(() => {
     if (isFirstVisit) {
@@ -97,6 +99,11 @@ const App = () => {
       console.log("Zoom effect: Removed event listeners");
     };
   }, []);
+
+  if (MAINT) {
+    // If maintenance ON — show single page only
+    return <Maintenance />;
+  }
 
   return (
     // <AnimatePresence mode="wait" initial={true}>
